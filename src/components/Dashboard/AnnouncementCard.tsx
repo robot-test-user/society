@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, User, Edit, Trash2 } from 'lucide-react';
+import { Calendar, User, Edit, Trash2, MapPin, Clock } from 'lucide-react';
 import { Announcement } from '../../types';
 
 interface AnnouncementCardProps {
@@ -9,18 +9,29 @@ interface AnnouncementCardProps {
   onDelete?: (announcementId: string) => void;
 }
 
-const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, canEdit, onEdit, onDelete }) => {
+const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
+  announcement,
+  canEdit,
+  onEdit,
+  onDelete,
+}) => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'High': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800';
-      case 'Medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-800';
-      case 'Low': return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600';
+      case 'High':
+        return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800';
+      case 'Medium':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-300 dark:border-yellow-800';
+      case 'Low':
+        return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600';
     }
   };
 
   return (
     <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-700 dark:to-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-600 p-4 sm:p-6 transition-all duration-300 hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-500 group">
+      
+      {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div className="flex-1 min-w-0">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2 leading-tight">
@@ -28,7 +39,11 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, canEd
           </h3>
         </div>
         <div className="flex items-center space-x-2 ml-3">
-          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(announcement.priority)} whitespace-nowrap`}>
+          <span
+            className={`px-2 py-1 rounded-full text-xs font-medium border ${getPriorityColor(
+              announcement.priority
+            )} whitespace-nowrap`}
+          >
             {announcement.priority}
           </span>
           {canEdit && (
@@ -51,8 +66,10 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, canEd
           )}
         </div>
       </div>
-      
+
+      {/* Content */}
       <div className="space-y-3">
+        {/* Description */}
         <div>
           <h4 className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
             Description
@@ -61,8 +78,33 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, canEd
             {announcement.content}
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-gray-200 dark:border-gray-600">
+
+        {/* Venue, Date & Time - NEW SECTION UNDER DESCRIPTION */}
+        <div className="mt-3 space-y-2">
+          {announcement.venue && (
+            <div className="flex items-center space-x-2">
+              <MapPin className="h-4 w-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                {announcement.venue}
+              </p>
+            </div>
+          )}
+          <div className="flex items-center space-x-2">
+            <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+              {announcement.createdAt.toLocaleDateString()}
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Clock className="h-4 w-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
+            <p className="text-sm text-gray-700 dark:text-gray-300">
+              {announcement.createdAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </p>
+          </div>
+        </div>
+
+        {/* Footer with Posted by */}
+        <div className="pt-3 border-t border-gray-200 dark:border-gray-600">
           <div className="flex items-center space-x-2">
             <User className="h-4 w-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
             <div>
@@ -71,18 +113,6 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, canEd
               </p>
               <p className="text-sm text-gray-700 dark:text-gray-300 truncate">
                 {announcement.createdBy}
-              </p>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
-            <div>
-              <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                Date
-              </p>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
-                {announcement.createdAt.toLocaleDateString()}
               </p>
             </div>
           </div>
