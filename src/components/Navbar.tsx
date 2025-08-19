@@ -1,14 +1,11 @@
 import React from 'react';
-import { LogOut, Users, Home, CheckSquare, MessageSquare, UserCheck, Sun, Moon } from 'lucide-react';
+import { LogOut, Users, Home, CheckSquare, MessageSquare, UserCheck } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 
 const Navbar: React.FC = () => {
   const { currentUser, logout } = useAuth();
-  const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
-
   const handleLogout = async () => {
     try {
       await logout();
@@ -16,16 +13,13 @@ const Navbar: React.FC = () => {
       console.error('Failed to logout:', error);
     }
   };
-
   const isUserSenior = currentUser?.role && ['EB', 'EC', 'Core'].includes(currentUser.role);
-
   const navItems = [
     { path: '/', icon: Home, label: 'Dashboard' },
     { path: '/tasks', icon: CheckSquare, label: 'Tasks' },
     { path: '/feedback', icon: MessageSquare, label: 'Feedback' },
     ...(isUserSenior ? [{ path: '/attendance', icon: UserCheck, label: 'Attendance' }] : [])
   ];
-
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'EB': return 'bg-purple-100 text-purple-800';
@@ -35,7 +29,6 @@ const Navbar: React.FC = () => {
       default: return 'bg-gray-100 text-gray-800';
     }
   };
-
   return (
     <nav className="bg-gray-800 dark:bg-gray-800 bg-white shadow-lg border-b border-gray-700 dark:border-gray-700 border-gray-200 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
@@ -78,12 +71,6 @@ const Navbar: React.FC = () => {
                 </span>
               </div>
               <button
-                onClick={toggleTheme}
-                className="p-2 text-gray-300 dark:text-gray-300 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-              >
-                {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </button>
-              <button
                 onClick={handleLogout}
                 className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-300 dark:text-gray-300 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100 rounded-md transition-colors"
               >
@@ -117,5 +104,4 @@ const Navbar: React.FC = () => {
     </nav>
   );
 };
-
 export default Navbar;
