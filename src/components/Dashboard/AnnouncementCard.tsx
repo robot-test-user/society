@@ -20,7 +20,7 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, canEd
   };
 
   return (
-    <div className="bg-gray-800 dark:bg-gray-900 rounded-xl shadow-lg border border-gray-600 dark:border-gray-700 p-4 sm:p-6 transition-all duration-300">
+    <div className="bg-gray-800 dark:bg-gray-900 rounded-xl shadow-lg border border-gray-600 dark:border-gray-700 p-4 sm:p-6">
       <div className="flex justify-between items-start mb-4">
         <div className="flex-1 min-w-0">
           <h3 className="text-base sm:text-lg font-semibold text-gray-100 dark:text-gray-200 mb-2 leading-tight">
@@ -35,14 +35,14 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, canEd
             <div className="flex space-x-1">
               <button
                 onClick={() => onEdit?.(announcement)}
-                className="p-1.5 text-gray-400 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-900/20 dark:hover:bg-blue-800/20 rounded-md transition-all duration-200"
+                className="p-1.5 text-gray-400 dark:text-gray-300 hover:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-900/20 dark:hover:bg-blue-800/20 rounded-md"
                 title="Edit announcement"
               >
                 <Edit className="h-4 w-4" />
               </button>
               <button
                 onClick={() => onDelete?.(announcement.id)}
-                className="p-1.5 text-gray-400 dark:text-gray-300 hover:text-red-400 dark:hover:text-red-300 hover:bg-red-900/20 dark:hover:bg-red-800/20 rounded-md transition-all duration-200"
+                className="p-1.5 text-gray-400 dark:text-gray-300 hover:text-red-400 dark:hover:text-red-300 hover:bg-red-900/20 dark:hover:bg-red-800/20 rounded-md"
                 title="Delete announcement"
               >
                 <Trash2 className="h-4 w-4" />
@@ -57,11 +57,12 @@ const AnnouncementCard: React.FC<AnnouncementCardProps> = ({ announcement, canEd
           <h4 className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
             Details
           </h4>
-          <div className="text-gray-300 dark:text-gray-400 text-sm sm:text-base leading-relaxed space-y-2">
+          <div className="text-gray-300 dark:text-gray-400 text-sm sm:text-base leading-relaxed flex flex-wrap gap-x-6 gap-y-2">
             <p><span className="font-medium">Title:</span> {announcement.title}</p>
             <p><span className="font-medium">Description:</span> {announcement.content}</p>
             <p><span className="font-medium">Venue:</span> {announcement.venue || 'Not specified'}</p>
             <p><span className="font-medium">Time:</span> {announcement.time || 'Not specified'}</p>
+            <p><span className="font-medium">Length:</span> {announcement.length || 'Not specified'}</p>
           </div>
         </div>
         
