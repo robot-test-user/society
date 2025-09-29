@@ -7,6 +7,7 @@ import AnnouncementCard from './AnnouncementCard';
 import EventCard from './EventCard';
 import CreateEventModal from './CreateEventModal';
 import CreateAnnouncementModal from './CreateAnnouncementModal';
+import EditAnnouncementModal from './EditAnnouncementModal';
 import ResourcesSection from './ResourcesSection';
 import happyPic from '../../assets/happy.jpg';
 import yuvrajPic from '../../assets/yuvraj.jpg';
@@ -19,6 +20,8 @@ const SeniorDashboard: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [showEventModal, setShowEventModal] = useState(false);
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
+  const [showEditAnnouncementModal, setShowEditAnnouncementModal] = useState(false);
+  const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
   const [selectedEventType, setSelectedEventType] = useState<'Workshop' | 'Hackathon' | 'Meet' | 'Event'>('Workshop');
 
   const eventTypes = [
@@ -122,12 +125,36 @@ const SeniorDashboard: React.FC = () => {
   const handleDeleteEvent = async (eventId: string) => {
     if (window.confirm('Are you sure you want to delete this event?')) {
       try {
+        // Get event details before deletion
+        const eventToDelete = events.find(event => event.id === eventId);
+        
         await deleteDoc(doc(db, 'events', eventId));
+        
+        // If event hasn't passed, delete related attendance records
+        if (eventToDelete && eventToDelete.date > new Date()) {
+          const attendanceQuery = query(
+            collection(db, 'attendance'),
+            where('eventId', '==', eventId)
+          );
+          const attendanceSnapshot = await getDocs(attendanceQuery);
+          
+          // Delete all attendance records for this event
+          const deletePromises = attendanceSnapshot.docs.map(doc => 
+            deleteDoc(doc.ref)
+          );
+          await Promise.all(deletePromises);
+        }
+        
         fetchEvents();
       } catch (error) {
         console.error('Error deleting event:', error);
       }
     }
+  };
+
+  const handleEditAnnouncement = (announcement: Announcement) => {
+    setSelectedAnnouncement(announcement);
+    setShowEditAnnouncementModal(true);
   };
 
   return (
@@ -168,10 +195,7 @@ const SeniorDashboard: React.FC = () => {
                       <AnnouncementCard 
                         announcement={announcement} 
                         canEdit={true}
-                        onEdit={(announcement) => {
-                          // TODO: Implement edit functionality
-                          console.log('Edit announcement:', announcement);
-                        }}
+                        onEdit={handleEditAnnouncement}
                         onDelete={async (announcementId) => {
                           if (window.confirm('Are you sure you want to delete this announcement?')) {
                             try {
@@ -410,6 +434,20 @@ const SeniorDashboard: React.FC = () => {
           onAnnouncementCreated={() => {
             fetchAnnouncements();
             setShowAnnouncementModal(false);
+          }}
+        />
+
+        <EditAnnouncementModal
+          isOpen={showEditAnnouncementModal}
+          onClose={() => {
+            setShowEditAnnouncementModal(false);
+            setSelectedAnnouncement(null);
+          }}
+          announcement={selectedAnnouncement}
+          onAnnouncementUpdated={() => {
+            fetchAnnouncements();
+            setShowEditAnnouncementModal(false);
+            setSelectedAnnouncement(null);
           }}
         />
       </div>

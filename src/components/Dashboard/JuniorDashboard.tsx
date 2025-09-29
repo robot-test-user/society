@@ -4,7 +4,6 @@ import { collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { Event, Announcement } from '../../types';
 import AnnouncementCard from './AnnouncementCard';
-import EventCard from './EventCard';
 import ResourcesSection from './ResourcesSection';
 import happyPic from '../../assets/happy.jpg';
 import yuvrajPic from '../../assets/yuvraj.jpg';

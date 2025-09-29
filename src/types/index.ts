@@ -56,6 +56,9 @@ export interface Announcement {
   title: string;
   content: string;
   priority: 'High' | 'Medium' | 'Low';
+  eventDate?: string;
+  eventTime?: string;
+  venue?: string;
   createdBy: string;
   createdAt: Date;
 }

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Users, Mail, Lock, UserCheck, User } from 'lucide-react';
+import { Users, Mail, Lock, UserCheck, User, KeyRound } from 'lucide-react';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../firebase/config';
 
 // Fixed email mappings for roles
 const ROLE_EMAILS = {
@@ -16,6 +18,10 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<'EB' | 'EC' | 'Core' | 'Member'>('Member');
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetMessage, setResetMessage] = useState('');
   const [error, setError] = useState('');
 
   const { login } = useAuth();
@@ -44,6 +50,28 @@ const Login: React.FC = () => {
     }
     
     setLoading(false);
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resetEmail) return;
+
+    setResetLoading(true);
+    setResetMessage('');
+    setError('');
+
+    try {
+      await sendPasswordResetEmail(auth, resetEmail);
+      setResetMessage('Password reset email sent! Check your inbox.');
+      setTimeout(() => {
+        setShowForgotPassword(false);
+        setResetEmail('');
+        setResetMessage('');
+      }, 3000);
+    } catch (error: any) {
+      setError(error.message || 'Failed to send reset email');
+    }
+    setResetLoading(false);
   };
 
   const getAuthorizedEmails = (selectedRole: string) => {
@@ -76,7 +104,7 @@ const Login: React.FC = () => {
       </div>
 
       <div className="max-w-md w-full relative z-10 mx-auto">
-        <div className="bg-gray-800/80 dark:bg-gray-800/80 bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700/50 dark:border-gray-700/50 border-gray-200/50 p-4 sm:p-6 lg:p-8 animate-fade-in-up">
+        <div className="bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700/50 p-4 sm:p-6 lg:p-8 animate-fade-in-up">
           {/* Logo and Title Section */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="relative mb-6">
@@ -95,23 +123,30 @@ const Login: React.FC = () => {
           </div>
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 dark:text-red-400 text-red-600 px-3 py-2 sm:px-4 sm:py-3 rounded-lg mb-4 sm:mb-6 backdrop-blur-sm text-sm">
+            <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-3 py-2 sm:px-4 sm:py-3 rounded-lg mb-4 sm:mb-6 backdrop-blur-sm text-sm">
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          {resetMessage && (
+            <div className="bg-green-500/10 border border-green-500/20 text-green-400 px-3 py-2 sm:px-4 sm:py-3 rounded-lg mb-4 sm:mb-6 backdrop-blur-sm text-sm">
+              {resetMessage}
+            </div>
+          )}
+
+          {!showForgotPassword ? (
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Full Name
               </label>
               <div className="relative">
-                <User className="h-5 w-5 text-gray-400 dark:text-gray-400 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                <User className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 dark:bg-gray-700/50 bg-gray-50/50 border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                   placeholder="Enter your full name"
                   required
                 />
@@ -119,15 +154,15 @@ const Login: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Select Role
               </label>
               <div className="relative">
-                <UserCheck className="h-5 w-5 text-gray-400 dark:text-gray-400 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                <UserCheck className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value as any)}
-                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 dark:bg-gray-700/50 bg-gray-50/50 border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                 >
                   <option value="Member">Member</option>
                   <option value="Core">Core</option>
@@ -135,27 +170,19 @@ const Login: React.FC = () => {
                   <option value="EB">EB</option>
                 </select>
               </div>
-              <div className="mt-2 p-2 bg-gray-700/30 dark:bg-gray-700/30 bg-gray-100/50 rounded text-xs text-gray-400 dark:text-gray-400 text-gray-600">
-                <p className="font-medium mb-1">Authorized emails for {role}:</p>
-                <ul className="space-y-1">
-                  {getAuthorizedEmails(role).map((email, index) => (
-                    <li key={index} className="text-blue-300 dark:text-blue-300 text-blue-600">{email}</li>
-                  ))}
-                </ul>
-              </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="h-5 w-5 text-gray-400 dark:text-gray-400 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                <Mail className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 dark:bg-gray-700/50 bg-gray-50/50 border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                   placeholder="Enter your email"
                   required
                 />
@@ -163,16 +190,16 @@ const Login: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Password
               </label>
               <div className="relative">
-                <Lock className="h-5 w-5 text-gray-400 dark:text-gray-400 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                <Lock className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 dark:bg-gray-700/50 bg-gray-50/50 border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                   placeholder="Enter your password"
                   required
                 />
@@ -182,7 +209,7 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 sm:py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-offset-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-medium shadow-lg text-sm sm:text-base"
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 sm:py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-medium shadow-lg text-sm sm:text-base"
             >
               {loading ? (
                 <div className="flex items-center justify-center space-x-2">
@@ -193,7 +220,73 @@ const Login: React.FC = () => {
                 'Sign In'
               )}
             </button>
+
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => setShowForgotPassword(true)}
+                className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                Forgot your password?
+              </button>
+            </div>
           </form>
+          ) : (
+            <form onSubmit={handleForgotPassword} className="space-y-4 sm:space-y-6">
+              <div className="text-center mb-4">
+                <KeyRound className="h-12 w-12 text-blue-500 mx-auto mb-2" />
+                <h3 className="text-lg font-semibold text-white mb-2">Reset Password</h3>
+                <p className="text-gray-400 text-sm">Enter your email to receive a password reset link</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                  <input
+                    type="email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={resetLoading}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 sm:py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-medium shadow-lg text-sm sm:text-base"
+              >
+                {resetLoading ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Sending...</span>
+                  </div>
+                ) : (
+                  'Send Reset Email'
+                )}
+              </button>
+
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForgotPassword(false);
+                    setResetEmail('');
+                    setError('');
+                    setResetMessage('');
+                  }}
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Back to Sign In
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
 
