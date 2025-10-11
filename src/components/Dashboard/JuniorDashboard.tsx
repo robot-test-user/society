@@ -143,6 +143,47 @@ const JuniorDashboard: React.FC = () => {
           <ResourcesSection />
         </div>
 
+        
+
+        {/* Events Section */}
+        {/* Task Management Section */}
+        <section className="mb-12 animate-fade-in-up animation-delay-600">
+          <div className="text-center mb-6 sm:mb-8 px-2 sm:px-0">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white dark:text-white text-gray-900 mb-4">Task Management</h2>
+            <p className="text-gray-400 dark:text-gray-400 text-gray-600">View assigned tasks and progress</p>
+          </div>
+          <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-xl p-4 sm:p-6 mx-2 sm:mx-0 border border-transparent dark:border-transparent border-gray-200 transition-colors duration-300">
+            <div className="text-center">
+              <p className="text-gray-400 dark:text-gray-400 text-gray-600 mb-4">Check your assigned tasks and deadlines</p>
+              <a
+                href="/tasks"
+                className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
+              >
+                View Tasks
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Feedback Section */}
+        <section className="mb-12 animate-fade-in-up animation-delay-800">
+          <div className="text-center mb-6 sm:mb-8 px-2 sm:px-0">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white dark:text-white text-gray-900 mb-4">Event Feedback</h2>
+            <p className="text-gray-400 dark:text-gray-400 text-gray-600">Share your experience and suggestions</p>
+          </div>
+          <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-xl p-4 sm:p-6 mx-2 sm:mx-0 border border-transparent dark:border-transparent border-gray-200 transition-colors duration-300">
+            <div className="text-center">
+              <p className="text-gray-400 dark:text-gray-400 text-gray-600 mb-4">Help us improve by providing feedback on events</p>
+              <a
+                href="/feedback"
+                className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm sm:text-base"
+              >
+                Give Feedback
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* Built By Section */}
         <section className="mb-12 animate-fade-in-up animation-delay-400">
           <div className="text-center mb-8 sm:mb-12 px-2 sm:px-0">
@@ -208,45 +249,6 @@ const JuniorDashboard: React.FC = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </section>
-
-        {/* Events Section */}
-        {/* Task Management Section */}
-        <section className="mb-12 animate-fade-in-up animation-delay-600">
-          <div className="text-center mb-6 sm:mb-8 px-2 sm:px-0">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white dark:text-white text-gray-900 mb-4">Task Management</h2>
-            <p className="text-gray-400 dark:text-gray-400 text-gray-600">View assigned tasks and progress</p>
-          </div>
-          <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-xl p-4 sm:p-6 mx-2 sm:mx-0 border border-transparent dark:border-transparent border-gray-200 transition-colors duration-300">
-            <div className="text-center">
-              <p className="text-gray-400 dark:text-gray-400 text-gray-600 mb-4">Check your assigned tasks and deadlines</p>
-              <a
-                href="/tasks"
-                className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base"
-              >
-                View Tasks
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* Feedback Section */}
-        <section className="mb-12 animate-fade-in-up animation-delay-800">
-          <div className="text-center mb-6 sm:mb-8 px-2 sm:px-0">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white dark:text-white text-gray-900 mb-4">Event Feedback</h2>
-            <p className="text-gray-400 dark:text-gray-400 text-gray-600">Share your experience and suggestions</p>
-          </div>
-          <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-xl p-4 sm:p-6 mx-2 sm:mx-0 border border-transparent dark:border-transparent border-gray-200 transition-colors duration-300">
-            <div className="text-center">
-              <p className="text-gray-400 dark:text-gray-400 text-gray-600 mb-4">Help us improve by providing feedback on events</p>
-              <a
-                href="/feedback"
-                className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm sm:text-base"
-              >
-                Give Feedback
-              </a>
-            </div>
           </div>
         </section>
 
