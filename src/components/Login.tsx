@@ -46,7 +46,8 @@ const ROLE_EMAILS = {
     'upant_be24@thapar.edu',
     'PARVDHRUV@GMAIL.COM',
     'parvdhruv@gmail.com',
-    'abassi_be24@thapar.edu'
+    'abassi_be24@thapar.edu',
+    'skunwarpreet19@gmail.com'
   ]
 };
 
