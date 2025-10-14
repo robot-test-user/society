@@ -29,7 +29,8 @@ const ROLE_EMAILS = {
     'prishuacharya@gmail.com',
     'mgoela_be24@thapar.edu',
     'ngupta4_be24@thapar.edu',
-    'arjites.bariyar@gmail.com'
+    'arjites.bariyar@gmail.com',
+    'akumar5_be24@thapar.edu'
   ],
   'Member': ['happyrajpurohit2006@gmail.com',
     'imittal_be24@thapar.edu',
@@ -49,7 +50,8 @@ const ROLE_EMAILS = {
     'parvdhruv@gmail.com',
     'abassi_be24@thapar.edu',
     'skunwarpreet19@gmail.com',
-    'pramittiwari9@gmail.com'
+    'pramittiwari9@gmail.com',
+    'sakshamt2006@gmail.com'
   ]
 };
 
