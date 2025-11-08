@@ -6,17 +6,17 @@ import { auth } from '../firebase/config';
 
 // Fixed email mappings for roles
 const ROLE_EMAILS = {
-  'EB': ['happyrajpurohit2006@gmail.com', 'psareen_be24@thapar.edu', 'bhavyaagarwal00000@gmail.com', 'lgupta1_be23@thapar.edu', 'ecdev4ishan@gmail.com', 'abhinivesh2005@gmail.com', 'raghav98233@gmail.com', 'isharma1_be23@thapar.edu' ],
+  'EB': ['happyrajpurohit2006@gmail.com', 'psareen_be24@thapar.edu', 'bhavyaagarwal00000@gmail.com', 'lgupta1_be23@thapar.edu', 'ecdev4ishan@gmail.com', 'abhinivesh2005@gmail.com', 'raghav98233@gmail.com', 'isharma1_be23@thapar.edu'],
   'EC': ['happyrajpurohit2006@gmail.com', 'chopragarv0@gmail.com'],
-  'Core': ['happyrajpurohit2006@gmail.com', 
-    'extraid11981@gmail.com', 
+  'Core': ['happyrajpurohit2006@gmail.com',
+    'extraid11981@gmail.com',
     'psareen_be24@thapar.edu',
-  'achopra_be24@thapar.edu',
-  'marushikagupta@gmail.com',
-  'agupta16_be24@thapar.edu',
-  'parakhgeetika@gmail.com',
-  'mgupta1_be24@thapar.edu',
-  'arathore_be24@thapar.edu',
+    'achopra_be24@thapar.edu',
+    'marushikagupta@gmail.com',
+    'agupta16_be24@thapar.edu',
+    'parakhgeetika@gmail.com',
+    'mgupta1_be24@thapar.edu',
+    'arathore_be24@thapar.edu',
     'aarora4_be24@thapar.edu',
     'ugoyal_be24@thapar.edu',
     'asharma23_be24@thapar.edu',
@@ -91,7 +91,7 @@ const Login: React.FC = () => {
     } catch (error: any) {
       setError(error.message || 'An error occurred');
     }
-    
+
     setLoading(false);
   };
 
@@ -179,101 +179,101 @@ const Login: React.FC = () => {
 
           {!showForgotPassword ? (
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Full Name
-              </label>
-              <div className="relative">
-                <User className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
-                  placeholder="Enter your full name"
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Select Role
-              </label>
-              <div className="relative">
-                <UserCheck className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
-                <select
-                  value={role}
-                  onChange={(e) => setRole(e.target.value as any)}
-                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
-                >
-                  <option value="Member">Member</option>
-                  <option value="Core">Core</option>
-                  <option value="EC">EC</option>
-                  <option value="EB">EB</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <Lock className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
-                  placeholder="Enter your password"
-                  required
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 sm:py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-medium shadow-lg text-sm sm:text-base"
-            >
-              {loading ? (
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Signing In...</span>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Full Name
+                </label>
+                <div className="relative">
+                  <User className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                    placeholder="Enter your full name"
+                    required
+                  />
                 </div>
-              ) : (
-                'Sign In'
-              )}
-            </button>
+              </div>
 
-            <div className="text-center">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Select Role
+                </label>
+                <div className="relative">
+                  <UserCheck className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                  <select
+                    value={role}
+                    onChange={(e) => setRole(e.target.value as any)}
+                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                  >
+                    <option value="Member">Member</option>
+                    <option value="Core">Core</option>
+                    <option value="EC">EC</option>
+                    <option value="EB">EB</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                    placeholder="Enter your password"
+                    required
+                  />
+                </div>
+              </div>
+
               <button
-                type="button"
-                onClick={() => setShowForgotPassword(true)}
-                className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 sm:py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-medium shadow-lg text-sm sm:text-base"
               >
-                Forgot your password?
+                {loading ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Signing In...</span>
+                  </div>
+                ) : (
+                  'Sign In'
+                )}
               </button>
-            </div>
-          </form>
+
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  Forgot your password?
+                </button>
+              </div>
+            </form>
           ) : (
             <form onSubmit={handleForgotPassword} className="space-y-4 sm:space-y-6">
               <div className="text-center mb-4">

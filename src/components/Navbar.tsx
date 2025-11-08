@@ -1,5 +1,5 @@
 import React from 'react';
-import { LogOut, Users, Home, CheckSquare, MessageSquare, UserCheck } from 'lucide-react';
+import { LogOut, Users, Home, CheckSquare, MessageSquare, UserCheck, GraduationCap } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -17,6 +17,7 @@ const Navbar: React.FC = () => {
   const navItems = [
     { path: '/', icon: Home, label: 'Dashboard' },
     { path: '/tasks', icon: CheckSquare, label: 'Tasks' },
+    { path: '/academics', icon: GraduationCap, label: 'Academics' },
     { path: '/feedback', icon: MessageSquare, label: 'Feedback' },
     ...(isUserSenior ? [{ path: '/attendance', icon: UserCheck, label: 'Attendance' }] : [])
   ];

@@ -72,3 +72,16 @@ export interface Resource {
   createdBy: string;
   createdAt: Date;
 }
+
+export interface AcademicMaterial {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  category: 'PYQ' | 'Solution' | 'Material';
+  subject?: string;
+  semester?: string;
+  year?: string;
+  createdBy: string;
+  createdAt: Date;
+}

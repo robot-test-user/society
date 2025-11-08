@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Calendar, Clock, MapPin } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { Announcement } from '../../types';
@@ -118,8 +118,9 @@ const EditAnnouncementModal: React.FC<EditAnnouncementModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Event Date (Optional)
+            <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <Calendar className="h-4 w-4 text-blue-500" />
+              <span>Event Date (Optional)</span>
             </label>
             <input
               type="date"
@@ -130,8 +131,9 @@ const EditAnnouncementModal: React.FC<EditAnnouncementModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Event Time (Optional)
+            <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <Clock className="h-4 w-4 text-green-500" />
+              <span>Event Time (Optional)</span>
             </label>
             <input
               type="time"
@@ -142,8 +144,9 @@ const EditAnnouncementModal: React.FC<EditAnnouncementModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Venue (Optional)
+            <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <MapPin className="h-4 w-4 text-red-500" />
+              <span>Venue (Optional)</span>
             </label>
             <input
               type="text"

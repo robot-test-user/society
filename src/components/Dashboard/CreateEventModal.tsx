@@ -47,8 +47,11 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({
       // Also create an announcement for the event
       await addDoc(collection(db, 'announcements'), {
         title: `New ${eventType}: ${title}`,
-        content: `${description} - Date: ${new Date(date).toLocaleDateString()} at ${time}, Venue: ${venue}`,
+        content: description,
         priority,
+        eventDate: date,
+        eventTime: time,
+        venue: venue,
         createdBy: currentUser.name,
         createdAt: new Date()
       });

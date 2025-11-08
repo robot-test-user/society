@@ -162,18 +162,9 @@ const SeniorDashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
         {/* Announcements Section */}
         <section className="mb-12">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 px-2 sm:px-0 space-y-3 sm:space-y-0">
-            <div className="flex items-center space-x-3">
-              <Megaphone className="h-8 w-8 text-blue-500" />
-              <h2 className="text-2xl sm:text-3xl font-bold text-white">Announcements</h2>
-            </div>
-            <button
-              onClick={() => setShowAnnouncementModal(true)}
-              className="flex items-center space-x-2 bg-blue-600 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base w-full sm:w-auto justify-center"
-            >
-              <Plus className="h-5 w-5" />
-              <span>Add Announcement</span>
-            </button>
+          <div className="flex items-center space-x-3 mb-4 sm:mb-6 px-2 sm:px-0">
+            <Megaphone className="h-8 w-8 text-blue-500" />
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">Announcements</h2>
           </div>
           
           <div className="bg-gray-800 rounded-xl p-4 sm:p-6 shadow-2xl border border-gray-700 mx-2 sm:mx-0">
