@@ -1,11 +1,14 @@
-import React from 'react';
-import { LogOut, Users, Home, CheckSquare, MessageSquare, UserCheck, GraduationCap, Activity } from 'lucide-react';
+import React, { useState } from 'react';
+import { LogOut, Users, Home, CheckSquare, MessageSquare, UserCheck, GraduationCap, Activity, User as UserIcon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import EditProfileModal from './Profile/EditProfileModal';
 
 const Navbar: React.FC = () => {
   const { currentUser, logout } = useAuth();
   const location = useLocation();
+  const [showEditProfile, setShowEditProfile] = useState(false);
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -13,6 +16,11 @@ const Navbar: React.FC = () => {
       console.error('Failed to logout:', error);
     }
   };
+
+  const handleProfileUpdate = () => {
+    window.location.reload();
+  };
+
   const isUserSenior = currentUser?.role && ['EB', 'EC', 'Core'].includes(currentUser.role);
   const navItems = [
     { path: '/', icon: Home, label: 'Dashboard' },
@@ -22,6 +30,7 @@ const Navbar: React.FC = () => {
     { path: '/feedback', icon: MessageSquare, label: 'Feedback' },
     ...(isUserSenior ? [{ path: '/attendance', icon: UserCheck, label: 'Attendance' }] : [])
   ];
+
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'EB': return 'bg-purple-100 text-purple-800';
@@ -31,6 +40,7 @@ const Navbar: React.FC = () => {
       default: return 'bg-gray-100 text-gray-800';
     }
   };
+
   return (
     <nav className="bg-gray-800 dark:bg-gray-800 bg-white shadow-lg border-b border-gray-700 dark:border-gray-700 border-gray-200 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
@@ -40,7 +50,7 @@ const Navbar: React.FC = () => {
               <Users className="h-8 w-8 text-blue-600" />
               <h1 className="text-lg sm:text-xl font-bold text-white dark:text-white text-gray-900">Society Sphere</h1>
             </Link>
-            
+
             <div className="hidden lg:flex items-center space-x-1">
               {navItems.map(({ path, icon: Icon, label }) => (
                 <Link
@@ -58,7 +68,7 @@ const Navbar: React.FC = () => {
               ))}
             </div>
           </div>
-          
+
           {currentUser && (
             <div className="flex items-center space-x-2 sm:space-x-4">
               <div className="hidden sm:flex items-center space-x-2">
@@ -73,6 +83,14 @@ const Navbar: React.FC = () => {
                 </span>
               </div>
               <button
+                onClick={() => setShowEditProfile(true)}
+                className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-300 dark:text-gray-300 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                title="Edit Profile"
+              >
+                <UserIcon className="h-4 w-4" />
+                <span className="hidden sm:inline">Profile</span>
+              </button>
+              <button
                 onClick={handleLogout}
                 className="flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-2 text-xs sm:text-sm text-gray-300 dark:text-gray-300 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100 rounded-md transition-colors"
               >
@@ -82,7 +100,7 @@ const Navbar: React.FC = () => {
             </div>
           )}
         </div>
-        
+
         {/* Mobile Navigation */}
         <div className="lg:hidden border-t border-gray-700 dark:border-gray-700 border-gray-200 py-2">
           <div className="flex items-center justify-center space-x-1 overflow-x-auto">
@@ -103,6 +121,14 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {showEditProfile && (
+        <EditProfileModal
+          isOpen={showEditProfile}
+          onClose={() => setShowEditProfile(false)}
+          onProfileUpdated={handleProfileUpdate}
+        />
+      )}
     </nav>
   );
 };

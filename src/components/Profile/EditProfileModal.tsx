@@ -1,0 +1,166 @@
+import React, { useState } from 'react';
+import { X, User, Save } from 'lucide-react';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../../firebase/config';
+import { useAuth } from '../../contexts/AuthContext';
+
+interface EditProfileModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onProfileUpdated: () => void;
+}
+
+const EditProfileModal: React.FC<EditProfileModalProps> = ({
+  isOpen,
+  onClose,
+  onProfileUpdated
+}) => {
+  const { currentUser } = useAuth();
+  const [name, setName] = useState(currentUser?.name || '');
+  const [shortName, setShortName] = useState(currentUser?.shortName || '');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  React.useEffect(() => {
+    if (currentUser) {
+      setName(currentUser.name);
+      setShortName(currentUser.shortName || '');
+    }
+  }, [currentUser]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentUser) return;
+
+    if (!name.trim()) {
+      setError('Name cannot be empty');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+    try {
+      await updateDoc(doc(db, 'users', currentUser.uid), {
+        name: name.trim(),
+        shortName: shortName.trim() || null,
+        updatedAt: new Date()
+      });
+
+      onProfileUpdated();
+      onClose();
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      setError('Failed to update profile. Please try again.');
+    }
+    setLoading(false);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-gray-800 rounded-lg max-w-md w-full p-6">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center space-x-2">
+            <User className="h-6 w-6 text-blue-500" />
+            <h2 className="text-xl font-bold text-white">Edit Profile</h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white transition-colors"
+          >
+            <X className="h-6 w-6" />
+          </button>
+        </div>
+
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Email (Cannot be changed)
+            </label>
+            <input
+              type="email"
+              value={currentUser?.email || ''}
+              disabled
+              className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg
+                         text-gray-500 cursor-not-allowed"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Full Name
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg
+                         text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Short Name (Optional)
+            </label>
+            <input
+              type="text"
+              value={shortName}
+              onChange={(e) => setShortName(e.target.value)}
+              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg
+                         text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              placeholder="e.g., John D."
+            />
+            <p className="text-xs text-gray-400 mt-1">
+              A shorter version of your name for display purposes
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300 mb-2">
+              Role (Cannot be changed)
+            </label>
+            <input
+              type="text"
+              value={currentUser?.role || ''}
+              disabled
+              className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg
+                         text-gray-500 cursor-not-allowed"
+            />
+          </div>
+
+          <div className="flex space-x-3 pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2 border border-gray-600 text-gray-300 rounded-lg
+                         hover:bg-gray-700 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700
+                         transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+            >
+              <Save className="h-4 w-4" />
+              <span>{loading ? 'Saving...' : 'Save Changes'}</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default EditProfileModal;

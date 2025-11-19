@@ -7,7 +7,8 @@ import {
   TrendingUp,
   Calendar,
   Award,
-  Activity
+  Activity,
+  Users
 } from 'lucide-react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/config';
@@ -15,6 +16,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Task, Feedback, Attendance } from '../../types';
 import CircularProgress from './CircularProgress';
 import StatCard from './StatCard';
+import AllUsersAnalytics from './AllUsersAnalytics';
 
 interface UserAnalytics {
   totalTasks: number;
@@ -29,6 +31,7 @@ interface UserAnalytics {
 
 const UserAnalyticsDashboard: React.FC = () => {
   const { currentUser } = useAuth();
+  const [showAllUsers, setShowAllUsers] = useState(false);
   const [analytics, setAnalytics] = useState<UserAnalytics>({
     totalTasks: 0,
     completedTasks: 0,
@@ -130,6 +133,12 @@ const UserAnalyticsDashboard: React.FC = () => {
     }
   };
 
+  const isUserSenior = currentUser?.role && ['EB', 'EC'].includes(currentUser.role);
+
+  if (showAllUsers && isUserSenior) {
+    return <AllUsersAnalytics />;
+  }
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -146,11 +155,24 @@ const UserAnalyticsDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <div className="flex items-center space-x-3 mb-2">
-          <Activity className="h-8 w-8 text-blue-500" />
-          <h1 className="text-3xl font-bold text-white dark:text-white">My Analytics Dashboard</h1>
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center space-x-3 mb-2">
+              <Activity className="h-8 w-8 text-blue-500" />
+              <h1 className="text-3xl font-bold text-white dark:text-white">My Analytics Dashboard</h1>
+            </div>
+            <p className="text-gray-400 dark:text-gray-400">Track your progress and performance</p>
+          </div>
+          {isUserSenior && (
+            <button
+              onClick={() => setShowAllUsers(true)}
+              className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <Users className="h-5 w-5" />
+              <span>View All Users</span>
+            </button>
+          )}
         </div>
-        <p className="text-gray-400 dark:text-gray-400">Track your progress and performance</p>
       </div>
 
       <div className="bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-800 dark:to-gray-900
