@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, User, Save } from 'lucide-react';
+import { X, User, Save, ImagePlus } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../firebase/config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../../firebase/config';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface EditProfileModalProps {
@@ -18,6 +19,8 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const { currentUser } = useAuth();
   const [name, setName] = useState(currentUser?.name || '');
   const [shortName, setShortName] = useState(currentUser?.shortName || '');
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string>(currentUser?.photoURL || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -25,8 +28,25 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     if (currentUser) {
       setName(currentUser.name);
       setShortName(currentUser.shortName || '');
+      setPhotoPreview(currentUser.photoURL || '');
     }
   }, [currentUser]);
+
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Photo size must be less than 5MB');
+        return;
+      }
+      setPhotoFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,9 +60,18 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     setLoading(true);
     setError('');
     try {
+      let photoURL = currentUser.photoURL;
+
+      if (photoFile) {
+        const storageRef = ref(storage, `profile-photos/${currentUser.uid}`);
+        await uploadBytes(storageRef, photoFile);
+        photoURL = await getDownloadURL(storageRef);
+      }
+
       await updateDoc(doc(db, 'users', currentUser.uid), {
         name: name.trim(),
         shortName: shortName.trim() || null,
+        photoURL: photoURL || null,
         updatedAt: new Date()
       });
 
@@ -59,7 +88,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-lg max-w-md w-full p-6">
+      <div className="bg-gray-800 rounded-lg max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center space-x-2">
             <User className="h-6 w-6 text-blue-500" />
@@ -80,6 +109,32 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex flex-col items-center mb-6">
+            <div className="relative mb-4">
+              {photoPreview ? (
+                <img
+                  src={photoPreview}
+                  alt="Profile preview"
+                  className="w-24 h-24 rounded-full object-cover border-4 border-blue-500"
+                />
+              ) : (
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-3xl font-bold border-4 border-blue-500">
+                  {currentUser?.name.charAt(0).toUpperCase()}
+                </div>
+              )}
+              <label htmlFor="photo-upload" className="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 cursor-pointer transition-colors">
+                <ImagePlus className="h-5 w-5" />
+                <input
+                  id="photo-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoChange}
+                  className="hidden"
+                />
+              </label>
+            </div>
+            <p className="text-xs text-gray-400 text-center">Click the camera icon to upload a photo (max 5MB)</p>
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Email (Cannot be changed)

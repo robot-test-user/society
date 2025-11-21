@@ -4,6 +4,7 @@ export interface User {
   role: 'EB' | 'EC' | 'Core' | 'Member';
   name: string;
   shortName?: string;
+  photoURL?: string;
   createdAt: Date;
 }
 

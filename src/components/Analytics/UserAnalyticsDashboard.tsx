@@ -282,30 +282,6 @@ const UserAnalyticsDashboard: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-800 dark:to-gray-900
-                      rounded-xl shadow-lg border border-gray-700 dark:border-gray-700 p-6">
-        <h3 className="text-lg font-semibold text-white dark:text-white mb-4">Performance Summary</h3>
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg">
-            <span className="text-gray-300">Task Performance</span>
-            <span className={`font-semibold ${analytics.taskCompletionRate >= 75 ? 'text-green-400' : analytics.taskCompletionRate >= 50 ? 'text-yellow-400' : 'text-red-400'}`}>
-              {analytics.taskCompletionRate >= 75 ? 'Excellent' : analytics.taskCompletionRate >= 50 ? 'Good' : 'Needs Improvement'}
-            </span>
-          </div>
-          <div className="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg">
-            <span className="text-gray-300">Attendance Performance</span>
-            <span className={`font-semibold ${analytics.attendanceRate >= 80 ? 'text-green-400' : analytics.attendanceRate >= 60 ? 'text-yellow-400' : 'text-red-400'}`}>
-              {analytics.attendanceRate >= 80 ? 'Excellent' : analytics.attendanceRate >= 60 ? 'Good' : 'Needs Improvement'}
-            </span>
-          </div>
-          <div className="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg">
-            <span className="text-gray-300">Feedback Contributions</span>
-            <span className={`font-semibold ${analytics.totalFeedbacks >= 5 ? 'text-green-400' : analytics.totalFeedbacks >= 3 ? 'text-yellow-400' : 'text-gray-400'}`}>
-              {analytics.totalFeedbacks >= 5 ? 'Active' : analytics.totalFeedbacks >= 3 ? 'Moderate' : 'Low'}
-            </span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

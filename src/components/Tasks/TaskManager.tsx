@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Filter } from 'lucide-react';
-import { collection, query, orderBy, getDocs, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, query, orderBy, getDocs, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { Task, Event } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
 import TaskCard from './TaskCard';
 import CreateTaskModal from './CreateTaskModal';
+import EditTaskModal from './EditTaskModal';
 
 const TaskManager: React.FC = () => {
   const { currentUser } = useAuth();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [filters, setFilters] = useState({
     domain: 'All',
     priority: 'All',
@@ -65,6 +68,23 @@ const TaskManager: React.FC = () => {
       } catch (error) {
         console.error('Error deleting task:', error);
       }
+    }
+  };
+
+  const handleEditTask = (task: Task) => {
+    setSelectedTask(task);
+    setShowEditModal(true);
+  };
+
+  const handleMarkComplete = async (task: Task) => {
+    try {
+      await updateDoc(doc(db, 'tasks', task.id), {
+        status: 'Completed',
+        updatedAt: new Date()
+      });
+      fetchTasks();
+    } catch (error) {
+      console.error('Error marking task as complete:', error);
     }
   };
 
@@ -164,7 +184,9 @@ const TaskManager: React.FC = () => {
               key={task.id}
               task={task}
               canEdit={isUserSenior}
+              onEdit={handleEditTask}
               onDelete={handleDeleteTask}
+              onMarkComplete={handleMarkComplete}
             />
           ))
         )}
@@ -179,6 +201,24 @@ const TaskManager: React.FC = () => {
           onTaskCreated={() => {
             fetchTasks();
             setShowCreateModal(false);
+          }}
+        />
+      )}
+
+      {/* Edit Task Modal */}
+      {isUserSenior && (
+        <EditTaskModal
+          isOpen={showEditModal}
+          onClose={() => {
+            setShowEditModal(false);
+            setSelectedTask(null);
+          }}
+          task={selectedTask}
+          events={events}
+          onTaskUpdated={() => {
+            fetchTasks();
+            setShowEditModal(false);
+            setSelectedTask(null);
           }}
         />
       )}
