@@ -15,6 +15,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string, role: User['role'], name: string) => Promise<void>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -43,6 +44,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             role: userData.role,
             name: userData.name,
             shortName: userData.shortName,
+            photoURL: userData.photoURL,
             createdAt: userData.createdAt.toDate()
           });
         }
@@ -71,11 +73,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await signOut(auth);
   };
 
+  const refreshUser = async () => {
+    const firebaseUser = auth.currentUser;
+    if (firebaseUser) {
+      const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setCurrentUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email!.toLowerCase(),
+          role: userData.role,
+          name: userData.name,
+          shortName: userData.shortName,
+          photoURL: userData.photoURL,
+          createdAt: userData.createdAt.toDate()
+        });
+      }
+    }
+  };
+
   const value = {
     currentUser,
     loading,
     login,
-    logout
+    logout,
+    refreshUser
   };
 
   return (

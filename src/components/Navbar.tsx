@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import EditProfileModal from './Profile/EditProfileModal';
 
 const Navbar: React.FC = () => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, refreshUser } = useAuth();
   const location = useLocation();
   const [showEditProfile, setShowEditProfile] = useState(false);
 
@@ -17,8 +17,8 @@ const Navbar: React.FC = () => {
     }
   };
 
-  const handleProfileUpdate = () => {
-    window.location.reload();
+  const handleProfileUpdate = async () => {
+    await refreshUser();
   };
 
   const isUserSenior = currentUser?.role && ['EB', 'EC', 'Core'].includes(currentUser.role);

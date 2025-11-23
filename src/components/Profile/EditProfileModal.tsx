@@ -60,12 +60,19 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     setLoading(true);
     setError('');
     try {
-      let photoURL = currentUser.photoURL;
+      let photoURL = currentUser.photoURL || '';
 
       if (photoFile) {
-        const storageRef = ref(storage, `profile-photos/${currentUser.uid}`);
-        await uploadBytes(storageRef, photoFile);
-        photoURL = await getDownloadURL(storageRef);
+        try {
+          const storageRef = ref(storage, `profile-photos/${currentUser.uid}`);
+          await uploadBytes(storageRef, photoFile);
+          photoURL = await getDownloadURL(storageRef);
+        } catch (uploadError) {
+          console.error('Error uploading photo:', uploadError);
+          setError('Failed to upload photo. Please try again.');
+          setLoading(false);
+          return;
+        }
       }
 
       await updateDoc(doc(db, 'users', currentUser.uid), {
@@ -75,13 +82,15 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         updatedAt: new Date()
       });
 
-      onProfileUpdated();
+      setLoading(false);
       onClose();
+      await new Promise(resolve => setTimeout(resolve, 300));
+      await onProfileUpdated();
     } catch (error) {
       console.error('Error updating profile:', error);
       setError('Failed to update profile. Please try again.');
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   if (!isOpen) return null;
