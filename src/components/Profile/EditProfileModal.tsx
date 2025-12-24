@@ -23,6 +23,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [photoPreview, setPhotoPreview] = useState<string>(currentUser?.photoURL || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [photoUploadFailed, setPhotoUploadFailed] = useState(false);
 
   React.useEffect(() => {
     if (currentUser) {
@@ -48,7 +49,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, skipPhotoUpload: boolean = false) => {
     e.preventDefault();
     if (!currentUser) return;
 
@@ -59,22 +60,32 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
     setLoading(true);
     setError('');
+    setPhotoUploadFailed(false);
     try {
       let photoURL = currentUser.photoURL || '';
 
-      if (photoFile) {
+      if (photoFile && !skipPhotoUpload) {
         try {
+          console.log('Starting photo upload...');
           const storageRef = ref(storage, `profile-photos/${currentUser.uid}`);
+
+          console.log('Uploading file to storage...');
           await uploadBytes(storageRef, photoFile);
+
+          console.log('Getting download URL...');
           photoURL = await getDownloadURL(storageRef);
-        } catch (uploadError) {
+          console.log('Photo uploaded successfully:', photoURL);
+        } catch (uploadError: any) {
           console.error('Error uploading photo:', uploadError);
-          setError('Failed to upload photo. Please try again.');
+          const errorMessage = uploadError?.message || 'Failed to upload photo';
+          setError(`Photo upload failed: ${errorMessage}`);
           setLoading(false);
+          setPhotoUploadFailed(true);
           return;
         }
       }
 
+      console.log('Updating profile in Firestore...');
       await updateDoc(doc(db, 'users', currentUser.uid), {
         name: name.trim(),
         shortName: shortName.trim() || null,
@@ -82,13 +93,15 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
         updatedAt: new Date()
       });
 
+      console.log('Profile updated successfully');
       setLoading(false);
       onClose();
       await new Promise(resolve => setTimeout(resolve, 300));
       await onProfileUpdated();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating profile:', error);
-      setError('Failed to update profile. Please try again.');
+      const errorMessage = error?.message || 'Failed to update profile';
+      setError(`Error: ${errorMessage}`);
       setLoading(false);
     }
   };
@@ -202,24 +215,36 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             />
           </div>
 
-          <div className="flex space-x-3 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-600 text-gray-300 rounded-lg
-                         hover:bg-gray-700 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700
-                         transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
-            >
-              <Save className="h-4 w-4" />
-              <span>{loading ? 'Saving...' : 'Save Changes'}</span>
-            </button>
+          <div className="flex flex-col gap-2 pt-4">
+            <div className="flex space-x-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="flex-1 px-4 py-2 border border-gray-600 text-gray-300 rounded-lg
+                           hover:bg-gray-700 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={(e) => handleSubmit(e as any, false)}
+                disabled={loading}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700
+                           transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+              >
+                <Save className="h-4 w-4" />
+                <span>{loading ? 'Saving...' : 'Save Changes'}</span>
+              </button>
+            </div>
+            {photoUploadFailed && photoFile && (
+              <button
+                onClick={(e) => handleSubmit(e as any, true)}
+                disabled={loading}
+                className="w-full px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700
+                           transition-colors disabled:opacity-50 text-sm"
+              >
+                {loading ? 'Saving...' : 'Save Without Photo'}
+              </button>
+            )}
           </div>
         </form>
       </div>
