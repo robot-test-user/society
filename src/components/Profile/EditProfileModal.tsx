@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { X, User, Save, ImagePlus } from 'lucide-react';
 import { doc, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../../firebase/config';
+import { db } from '../../firebase/config';
 import { useAuth } from '../../contexts/AuthContext';
+import { uploadToCloudinary } from '../../config/cloudinary';
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -66,14 +66,9 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
 
       if (photoFile && !skipPhotoUpload) {
         try {
-          console.log('Starting photo upload...');
-          const storageRef = ref(storage, `profile-photos/${currentUser.uid}`);
-
-          console.log('Uploading file to storage...');
-          await uploadBytes(storageRef, photoFile);
-
-          console.log('Getting download URL...');
-          photoURL = await getDownloadURL(storageRef);
+          console.log('Starting photo upload to Cloudinary...');
+          console.log('Uploading file...');
+          photoURL = await uploadToCloudinary(photoFile);
           console.log('Photo uploaded successfully:', photoURL);
         } catch (uploadError: any) {
           console.error('Error uploading photo:', uploadError);
