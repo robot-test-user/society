@@ -4,6 +4,7 @@ import { collection, addDoc, query, orderBy, getDocs } from 'firebase/firestore'
 import { db } from '../../firebase/config';
 import { useAuth } from '../../contexts/AuthContext';
 import { Event } from '../../types';
+import { addPoints, POINTS_CONFIG } from '../../utils/pointsManager';
 
 const FeedbackForm: React.FC = () => {
   const { currentUser } = useAuth();
@@ -47,6 +48,8 @@ const FeedbackForm: React.FC = () => {
         comments,
         createdAt: new Date()
       });
+
+      await addPoints(currentUser.email, POINTS_CONFIG.FEEDBACK);
 
       setSuccess(true);
       setSelectedEventId('');

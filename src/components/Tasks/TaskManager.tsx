@@ -4,6 +4,7 @@ import { collection, query, orderBy, getDocs, addDoc, deleteDoc, doc, updateDoc 
 import { db } from '../../firebase/config';
 import { Task, Event } from '../../types';
 import { useAuth } from '../../contexts/AuthContext';
+import { addPoints, POINTS_CONFIG } from '../../utils/pointsManager';
 import TaskCard from './TaskCard';
 import CreateTaskModal from './CreateTaskModal';
 import EditTaskModal from './EditTaskModal';
@@ -82,6 +83,11 @@ const TaskManager: React.FC = () => {
         status: 'Completed',
         updatedAt: new Date()
       });
+
+      if (task.assignedToEmail) {
+        await addPoints(task.assignedToEmail, POINTS_CONFIG.TASK_COMPLETION);
+      }
+
       fetchTasks();
     } catch (error) {
       console.error('Error marking task as complete:', error);

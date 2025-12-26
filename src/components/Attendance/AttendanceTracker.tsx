@@ -4,6 +4,7 @@ import { collection, query, getDocs, addDoc, where } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { useAuth } from '../../contexts/AuthContext';
 import { Event, User, Attendance } from '../../types';
+import { addPoints, POINTS_CONFIG } from '../../utils/pointsManager';
 
 const AttendanceTracker: React.FC = () => {
   const { currentUser } = useAuth();
@@ -99,6 +100,10 @@ const AttendanceTracker: React.FC = () => {
         markedByName: currentUser.name,
         markedAt: new Date()
       });
+
+      if (status === 'Present') {
+        await addPoints(userEmail, POINTS_CONFIG.ATTENDANCE);
+      }
 
       fetchAttendance();
     } catch (error) {

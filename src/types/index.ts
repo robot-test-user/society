@@ -5,6 +5,7 @@ export interface User {
   name: string;
   shortName?: string;
   photoURL?: string;
+  points?: number;
   createdAt: Date;
 }
 
