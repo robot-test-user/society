@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { LogOut, Users, Home, CheckSquare, MessageSquare, UserCheck, GraduationCap, Activity, User as UserIcon } from 'lucide-react';
+import { LogOut, Users, Home, CheckSquare, MessageSquare, UserCheck, GraduationCap, Activity, User as UserIcon, Sun, Moon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import EditProfileModal from './Profile/EditProfileModal';
 
 const Navbar: React.FC = () => {
   const { currentUser, logout, refreshUser } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const location = useLocation();
   const [showEditProfile, setShowEditProfile] = useState(false);
 
@@ -71,6 +73,15 @@ const Navbar: React.FC = () => {
 
           {currentUser && (
             <div className="flex items-center space-x-1 md:space-x-3">
+              <button
+                onClick={toggleTheme}
+                className="flex items-center px-2 md:px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 dark:hover:bg-gray-700 rounded-md transition-colors"
+                title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                <span className="hidden md:inline text-sm ml-1">{isDark ? 'Light' : 'Dark'}</span>
+              </button>
+
               <button
                 onClick={() => setShowEditProfile(true)}
                 className="hidden md:flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-700 transition-colors group"
