@@ -45,6 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             name: userData.name,
             shortName: userData.shortName,
             photoURL: userData.photoURL,
+            points: userData.points,
             createdAt: userData.createdAt.toDate()
           });
         }
@@ -65,6 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       name: name || user.email?.split('@')[0] || 'User',
       email: normalizedEmail,
       role,
+      points: 0,
       createdAt: new Date()
     }, { merge: true });
   };
@@ -86,6 +88,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           name: userData.name,
           shortName: userData.shortName,
           photoURL: userData.photoURL,
+          points: userData.points,
           createdAt: userData.createdAt.toDate()
         });
       }

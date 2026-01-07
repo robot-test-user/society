@@ -1,4 +1,4 @@
-import { doc, updateDoc, getDoc, increment } from 'firebase/firestore';
+import { doc, updateDoc, getDoc, increment, query, collection, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 export const POINTS_CONFIG = {
@@ -9,15 +9,17 @@ export const POINTS_CONFIG = {
 
 export const addPoints = async (userEmail: string, points: number): Promise<void> => {
   try {
-    const usersRef = doc(db, 'users', userEmail.toLowerCase());
+    const normalizedEmail = userEmail.toLowerCase();
+    const q = query(collection(db, 'users'), where('email', '==', normalizedEmail));
+    const querySnapshot = await getDocs(q);
 
-    const userDoc = await getDoc(usersRef);
-    if (!userDoc.exists()) {
-      console.error('User not found');
+    if (querySnapshot.empty) {
+      console.error('User not found with email:', normalizedEmail);
       return;
     }
 
-    await updateDoc(usersRef, {
+    const userDoc = querySnapshot.docs[0];
+    await updateDoc(userDoc.ref, {
       points: increment(points)
     });
   } catch (error) {
@@ -28,8 +30,15 @@ export const addPoints = async (userEmail: string, points: number): Promise<void
 
 export const getUserPoints = async (userEmail: string): Promise<number> => {
   try {
-    const userDoc = await getDoc(doc(db, 'users', userEmail.toLowerCase()));
-    return userDoc.data()?.points || 0;
+    const normalizedEmail = userEmail.toLowerCase();
+    const q = query(collection(db, 'users'), where('email', '==', normalizedEmail));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return 0;
+    }
+
+    return querySnapshot.docs[0].data().points || 0;
   } catch (error) {
     console.error('Error fetching user points:', error);
     return 0;
