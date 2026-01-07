@@ -55,6 +55,7 @@ const AttendanceTracker: React.FC = () => {
         name: doc.data().name,
         shortName: doc.data().shortName,
         role: doc.data().role,
+        photoURL: doc.data().photoURL,
         createdAt: doc.data().createdAt.toDate()
       }));
       setUsers(userList);
@@ -162,11 +163,19 @@ const AttendanceTracker: React.FC = () => {
                 <div key={user.uid} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 border border-gray-200 dark:border-gray-600 rounded-lg space-y-3 sm:space-y-0 transition-colors duration-300">
                   <div className="flex items-center space-x-3">
                     <div className="flex-shrink-0">
-                      <div className="h-10 w-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                          {(user.name || 'U').charAt(0).toUpperCase()}
-                        </span>
-                      </div>
+                      {user.photoURL ? (
+                        <img
+                          src={user.photoURL}
+                          alt={user.name}
+                          className="h-10 w-10 rounded-full object-cover border-2 border-blue-500"
+                        />
+                      ) : (
+                        <div className="h-10 w-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
+                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            {(user.name || 'U').charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name || 'Unknown User'}</p>

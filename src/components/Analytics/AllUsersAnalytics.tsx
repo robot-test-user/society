@@ -63,6 +63,7 @@ const AllUsersAnalytics: React.FC = () => {
         name: doc.data().name,
         shortName: doc.data().shortName,
         role: doc.data().role,
+        photoURL: doc.data().photoURL,
         createdAt: doc.data().createdAt.toDate()
       }));
 
@@ -222,10 +223,18 @@ const AllUsersAnalytics: React.FC = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4 flex-1">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full
-                                    flex items-center justify-center text-white text-xl font-bold shadow-lg">
-                      {user.name.charAt(0).toUpperCase()}
-                    </div>
+                    {user.photoURL ? (
+                      <img
+                        src={user.photoURL}
+                        alt={user.name}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-blue-500 shadow-lg"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full
+                                      flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                        {user.name.charAt(0).toUpperCase()}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <h3 className="text-lg font-semibold text-white truncate">{user.name}</h3>
                       <p className="text-sm text-gray-400 truncate">{user.email}</p>
