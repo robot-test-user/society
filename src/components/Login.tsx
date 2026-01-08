@@ -182,12 +182,12 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 from-blue-50 via-indigo-50 to-purple-50 relative overflow-hidden flex items-center justify-center py-4 px-4 sm:px-6 lg:px-8 transition-all duration-500">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 relative overflow-hidden flex items-center justify-center py-4 px-4 sm:px-6 lg:px-8 transition-all duration-500">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 dark:opacity-20 opacity-30 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 dark:opacity-20 opacity-30 animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-60 h-60 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 dark:opacity-20 opacity-30 animate-pulse animation-delay-4000"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-300 dark:bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-15 dark:opacity-20 animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-teal-300 dark:bg-teal-500 rounded-full mix-blend-multiply filter blur-3xl opacity-15 dark:opacity-20 animate-pulse animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-60 h-60 bg-cyan-300 dark:bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-15 dark:opacity-20 animate-pulse animation-delay-4000"></div>
       </div>
 
       {/* Floating Particles */}
@@ -195,7 +195,7 @@ const Login: React.FC = () => {
         {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-2 h-2 bg-white rounded-full opacity-10 animate-float"
+            className="absolute w-2 h-2 bg-blue-400 dark:bg-white rounded-full opacity-5 dark:opacity-10 animate-float"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -207,20 +207,20 @@ const Login: React.FC = () => {
       </div>
 
       <div className="max-w-md w-full relative z-10 mx-auto">
-        <div className="bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700/50 p-4 sm:p-6 lg:p-8 animate-fade-in-up">
+        <div className="bg-white dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl dark:shadow-2xl border border-gray-200 dark:border-gray-700/50 p-4 sm:p-6 lg:p-8 animate-fade-in-up">
           {/* Logo and Title Section */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="relative mb-6">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mx-auto flex items-center justify-center shadow-lg">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-teal-600 rounded-2xl mx-auto flex items-center justify-center shadow-lg">
                 <Users className="h-10 w-10 text-white" />
               </div>
               <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full animate-ping"></div>
               <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full"></div>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent mb-2">
               Society Organiser
             </h1>
-            <p className="text-gray-400 dark:text-gray-400 text-gray-600 text-sm">
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
               Welcome back! Please sign in to continue
             </p>
           </div>
@@ -240,16 +240,16 @@ const Login: React.FC = () => {
           {!showForgotPassword ? (
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                   Full Name
                 </label>
                 <div className="relative">
-                  <User className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                  <User className="h-5 w-5 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                     placeholder="Enter your full name"
                     required
                   />
@@ -257,15 +257,15 @@ const Login: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                   Select Role
                 </label>
                 <div className="relative">
-                  <UserCheck className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                  <UserCheck className="h-5 w-5 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
                   <select
                     value={role}
                     onChange={(e) => setRole(e.target.value as any)}
-                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                   >
                     <option value="Member">Member</option>
                     <option value="Core">Core</option>
@@ -276,16 +276,16 @@ const Login: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                  <Mail className="h-5 w-5 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                     placeholder="Enter your email"
                     required
                   />
@@ -293,16 +293,16 @@ const Login: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                  <Lock className="h-5 w-5 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                     placeholder="Enter your password"
                     required
                   />
@@ -312,7 +312,7 @@ const Login: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 sm:py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-medium shadow-lg text-sm sm:text-base"
+                className="w-full bg-gradient-to-r from-blue-600 to-teal-600 text-white py-2 sm:py-3 px-4 rounded-lg hover:from-blue-700 hover:to-teal-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-medium shadow-lg text-sm sm:text-base"
               >
                 {loading ? (
                   <div className="flex items-center justify-center space-x-2">
@@ -328,7 +328,7 @@ const Login: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowForgotPassword(true)}
-                  className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                  className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                 >
                   Forgot your password?
                 </button>
@@ -337,22 +337,22 @@ const Login: React.FC = () => {
           ) : (
             <form onSubmit={handleForgotPassword} className="space-y-4 sm:space-y-6">
               <div className="text-center mb-4">
-                <KeyRound className="h-12 w-12 text-blue-500 mx-auto mb-2" />
-                <h3 className="text-lg font-semibold text-white mb-2">Reset Password</h3>
-                <p className="text-gray-400 text-sm">Enter your email to receive a password reset link</p>
+                <KeyRound className="h-12 w-12 text-blue-600 dark:text-blue-500 mx-auto mb-2" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Reset Password</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Enter your email to receive a password reset link</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                  <Mail className="h-5 w-5 text-gray-400 dark:text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
                   <input
                     type="email"
                     value={resetEmail}
                     onChange={(e) => setResetEmail(e.target.value)}
-                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-700/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
+                    className="pl-10 w-full px-3 py-2 sm:py-3 bg-gray-50 dark:bg-gray-700/50 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 backdrop-blur-sm transition-all duration-200 text-sm sm:text-base"
                     placeholder="Enter your email"
                     required
                   />
@@ -362,7 +362,7 @@ const Login: React.FC = () => {
               <button
                 type="submit"
                 disabled={resetLoading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 sm:py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-medium shadow-lg text-sm sm:text-base"
+                className="w-full bg-gradient-to-r from-blue-600 to-teal-600 text-white py-2 sm:py-3 px-4 rounded-lg hover:from-blue-700 hover:to-teal-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] font-medium shadow-lg text-sm sm:text-base"
               >
                 {resetLoading ? (
                   <div className="flex items-center justify-center space-x-2">
@@ -383,7 +383,7 @@ const Login: React.FC = () => {
                     setError('');
                     setResetMessage('');
                   }}
-                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                 >
                   Back to Sign In
                 </button>

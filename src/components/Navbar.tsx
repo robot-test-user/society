@@ -44,13 +44,13 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-gray-800 dark:bg-gray-800 bg-white shadow-lg border-b border-gray-700 dark:border-gray-700 border-gray-200 transition-colors duration-300">
+    <nav className="bg-white dark:bg-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-8">
             <Link to="/" className="flex items-center space-x-3">
               <Users className="h-8 w-8 text-blue-600" />
-              <h1 className="text-lg sm:text-xl font-bold text-white dark:text-white text-gray-900">Society Sphere</h1>
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Society Sphere</h1>
             </Link>
 
             <div className="hidden lg:flex items-center space-x-1">
@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
                   className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     location.pathname === path
                       ? 'bg-blue-600 text-white'
-                      : 'text-gray-300 dark:text-gray-300 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100'
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -75,7 +75,7 @@ const Navbar: React.FC = () => {
             <div className="flex items-center space-x-1 md:space-x-3">
               <button
                 onClick={toggleTheme}
-                className="flex items-center px-2 md:px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 dark:hover:bg-gray-700 rounded-md transition-colors"
+                className="flex items-center px-2 md:px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
                 title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
               >
                 {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
 
               <button
                 onClick={() => setShowEditProfile(true)}
-                className="hidden md:flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-700 dark:hover:bg-gray-700 transition-colors group"
+                className="hidden md:flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group"
                 title="Edit Profile"
               >
                 {currentUser.photoURL ? (
@@ -94,13 +94,13 @@ const Navbar: React.FC = () => {
                     className="h-8 w-8 rounded-full object-cover border-2 border-blue-500"
                   />
                 ) : (
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-blue-500 to-teal-600 flex items-center justify-center text-white text-xs font-bold">
                     {currentUser.name.charAt(0).toUpperCase()}
                   </div>
                 )}
                 <div className="flex flex-col text-left">
-                  <span className="text-xs font-medium text-gray-300">Welcome</span>
-                  <span className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors truncate max-w-[100px]">
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Welcome</span>
+                  <span className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors truncate max-w-[100px]">
                     {currentUser.name}
                   </span>
                 </div>
@@ -111,7 +111,7 @@ const Navbar: React.FC = () => {
 
               <button
                 onClick={() => setShowEditProfile(true)}
-                className="md:hidden flex items-center px-2 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-md transition-colors"
+                className="md:hidden flex items-center px-2 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
                 title="Edit Profile"
               >
                 {currentUser.photoURL ? (
@@ -121,7 +121,7 @@ const Navbar: React.FC = () => {
                     className="h-7 w-7 rounded-full object-cover border-2 border-blue-500"
                   />
                 ) : (
-                  <div className="h-7 w-7 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold">
+                  <div className="h-7 w-7 rounded-full bg-gradient-to-br from-blue-500 to-teal-600 flex items-center justify-center text-white text-xs font-bold">
                     {currentUser.name.charAt(0).toUpperCase()}
                   </div>
                 )}
@@ -129,7 +129,7 @@ const Navbar: React.FC = () => {
 
               <button
                 onClick={handleLogout}
-                className="flex items-center px-2 md:px-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 dark:hover:bg-gray-700 rounded-md transition-colors"
+                className="flex items-center px-2 md:px-3 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
                 title="Logout"
               >
                 <LogOut className="h-4 w-4" />
@@ -140,7 +140,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="lg:hidden border-t border-gray-700 dark:border-gray-700 border-gray-200 py-2">
+        <div className="lg:hidden border-t border-gray-200 dark:border-gray-700 py-2">
           <div className="flex items-center justify-center space-x-1 overflow-x-auto">
             {navItems.map(({ path, icon: Icon, label }) => (
               <Link
@@ -149,7 +149,7 @@ const Navbar: React.FC = () => {
                 className={`flex flex-col items-center space-y-1 px-2 py-2 rounded-md text-xs font-medium transition-colors min-w-0 ${
                   location.pathname === path
                     ? 'bg-blue-600 text-white'
-                    : 'text-gray-300 dark:text-gray-300 text-gray-600 hover:text-white dark:hover:text-white hover:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-700 hover:bg-gray-100'
+                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                 }`}
               >
                 <Icon className="h-4 w-4" />
