@@ -94,7 +94,6 @@ const TaskManager: React.FC = () => {
     }
   };
 
-  // ✅ FIXED filter conditions (were using "=" instead of "===")
   const filteredTasks = tasks.filter(task => {
     return (
       (filters.domain === 'All' || task.domain === filters.domain) &&
@@ -103,13 +102,16 @@ const TaskManager: React.FC = () => {
     );
   });
 
+  const activeTasks = filteredTasks.filter(task => task.status !== 'Completed');
+  const completedTasks = filteredTasks.filter(task => task.status === 'Completed');
+
   const domains = ['All', ...Array.from(new Set(tasks.map(task => task.domain)))];
   const priorities = ['All', 'High', 'Medium', 'Low'];
   const statuses = ['All', 'Upcoming', 'Today', 'Completed'];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      
+
       {/* Header & Add Task */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Task Management</h1>
@@ -125,8 +127,8 @@ const TaskManager: React.FC = () => {
       </div>
 
       {/* Filters Card */}
-      <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-700 dark:to-gray-800 
-                      rounded-xl shadow-lg border border-gray-200 dark:border-gray-600 p-6 mb-6 
+      <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-700 dark:to-gray-800
+                      rounded-xl shadow-lg border border-gray-200 dark:border-gray-600 p-6 mb-6
                       hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-300">
         <div className="flex items-center space-x-2 mb-4">
           <Filter className="h-5 w-5 text-gray-600 dark:text-gray-300" />
@@ -138,8 +140,8 @@ const TaskManager: React.FC = () => {
             <select
               value={filters.domain}
               onChange={(e) => setFilters({ ...filters, domain: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
-                         bg-white dark:bg-gray-800 dark:text-gray-200 
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
+                         bg-white dark:bg-gray-800 dark:text-gray-200
                          focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {domains.map(domain => (
@@ -152,8 +154,8 @@ const TaskManager: React.FC = () => {
             <select
               value={filters.priority}
               onChange={(e) => setFilters({ ...filters, priority: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
-                         bg-white dark:bg-gray-800 dark:text-gray-200 
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
+                         bg-white dark:bg-gray-800 dark:text-gray-200
                          focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {priorities.map(priority => (
@@ -166,8 +168,8 @@ const TaskManager: React.FC = () => {
             <select
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg 
-                         bg-white dark:bg-gray-800 dark:text-gray-200 
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg
+                         bg-white dark:bg-gray-800 dark:text-gray-200
                          focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               {statuses.map(status => (
@@ -178,25 +180,51 @@ const TaskManager: React.FC = () => {
         </div>
       </div>
 
-      {/* Tasks Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredTasks.length === 0 ? (
-          <div className="col-span-full text-center py-12 text-gray-500 dark:text-gray-400">
-            <p>No tasks found matching your filters.</p>
+      {/* Active Tasks Section */}
+      {(filters.status === 'All' || filters.status !== 'Completed') && (
+        <div>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Active Tasks</h2>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+            {activeTasks.length === 0 ? (
+              <div className="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">
+                <p>No active tasks found.</p>
+              </div>
+            ) : (
+              activeTasks.map(task => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  canEdit={isUserSenior}
+                  canDelete={isUserSenior}
+                  onEdit={handleEditTask}
+                  onDelete={handleDeleteTask}
+                  onMarkComplete={handleMarkComplete}
+                />
+              ))
+            )}
           </div>
-        ) : (
-          filteredTasks.map(task => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              canEdit={isUserSenior}
-              onEdit={handleEditTask}
-              onDelete={handleDeleteTask}
-              onMarkComplete={handleMarkComplete}
-            />
-          ))
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Completed Tasks Section */}
+      {(filters.status === 'All' || filters.status === 'Completed') && completedTasks.length > 0 && (
+        <div>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Completed Tasks</h2>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {completedTasks.map(task => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                canEdit={isUserSenior}
+                canDelete={isUserSenior}
+                onEdit={handleEditTask}
+                onDelete={handleDeleteTask}
+                onMarkComplete={handleMarkComplete}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Create Task Modal */}
       {isUserSenior && (

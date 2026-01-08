@@ -5,12 +5,13 @@ import { Task } from '../../types';
 interface TaskCardProps {
   task: Task;
   canEdit?: boolean;
+  canDelete?: boolean;
   onEdit?: (task: Task) => void;
   onDelete?: (taskId: string) => void;
   onMarkComplete?: (task: Task) => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, canEdit, onEdit, onDelete, onMarkComplete }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, canEdit, canDelete, onEdit, onDelete, onMarkComplete }) => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'High': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800';
@@ -51,22 +52,22 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, canEdit, onEdit, onDelete, on
             </button>
           )}
           {canEdit && (
-            <>
-              <button
-                onClick={() => onEdit?.(task)}
-                className="p-1 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                title="Edit Task"
-              >
-                <Edit className="h-4 w-4" />
-              </button>
-              <button
-                onClick={() => onDelete?.(task.id)}
-                className="p-1 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
-                title="Delete Task"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </>
+            <button
+              onClick={() => onEdit?.(task)}
+              className="p-1 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              title="Edit Task"
+            >
+              <Edit className="h-4 w-4" />
+            </button>
+          )}
+          {canDelete && (
+            <button
+              onClick={() => onDelete?.(task.id)}
+              className="p-1 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+              title="Delete Task"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
           )}
         </div>
       </div>
